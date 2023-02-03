@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Trust News</string>
+    <string name="listadoNoticias">Listado de Noticias</string>
+    <string name="volver">Volver</string>
+    <string name="ficha">Ficha</string>
+    <string name="guardar">Guardar</string>
+    <string name="info_obligatoria">*Información obligatoria</string>
+    <string name="fiable">Fiable</string>
+    <string name="no_fiable">No fiable</string>
+    <string name="leido">Leído</string>
+    <string name="favorito">Favorito</string>
+</resources>
