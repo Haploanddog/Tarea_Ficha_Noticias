@@ -26,7 +26,7 @@ import dam.pmdm.tarea_final_ut03.R;
 import dam.pmdm.tarea_final_ut03.entidades.Noticia;
 import dam.pmdm.tarea_final_ut03.listaNoticias.conversorfechas.DatePickerFragment;
 
-public class FichaFragment extends Fragment implements  DatePickerDialog.OnDateSetListener{
+public class FichaFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
     private EditText etTitular, etEnlace, etFecha;
     private CheckBox cbLeido, cbFavorito;
@@ -34,6 +34,7 @@ public class FichaFragment extends Fragment implements  DatePickerDialog.OnDateS
     private ListadoViewModel mViewModel;
     private boolean esParaActualizar;
     private Noticia noticia;
+
     public static FichaFragment newInstance() {
         return new FichaFragment();
     }
@@ -69,8 +70,11 @@ public class FichaFragment extends Fragment implements  DatePickerDialog.OnDateS
 
 
         mViewModel = new ViewModelProvider(this).get(ListadoViewModel.class);
-        if(esParaActualizar) {
+        if (esParaActualizar) {
             rellenarFicha(noticia);
+
+        } else {
+            rbFiable.setChecked(true);
         }
         etFecha.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,9 +86,8 @@ public class FichaFragment extends Fragment implements  DatePickerDialog.OnDateS
         // TODO: Use the ViewModel
 
 
-
-
     }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -110,6 +113,7 @@ public class FichaFragment extends Fragment implements  DatePickerDialog.OnDateS
             rbNoFiable.setChecked(savedInstanceState.getBoolean("no_fiable"));
         }
     }
+
     private void showDatePickerDialog() {
         DatePickerFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.show(getChildFragmentManager(), "date picker");
@@ -126,70 +130,81 @@ public class FichaFragment extends Fragment implements  DatePickerDialog.OnDateS
         etFecha.setText(currentDateString);
     }
 
-    public Noticia getNoticiaDesdeFicha(){
-        Noticia noticia = new Noticia();
-        String titular ="";
-        String enlace = "";
-        String fecha = "";
+    public Noticia getNoticiaDesdeFicha() {
+        Noticia noticiaN = new Noticia();
+
+        noticiaN.setTitular(etTitular.getText().toString());
+        noticiaN.setEnlace(etEnlace.getText().toString());
+        noticiaN.setFechaFromString(etFecha.getText().toString());
+        noticiaN.setLeida(cbLeido.isChecked());
+        noticiaN.setFavorita(cbFavorito.isChecked());
+
+        if (esParaActualizar) {
+            noticiaN.setUid(noticia.getUid());
+        }
+        boolean esFiable = false;
+        if (rbFiable.isChecked() || rbNoFiable.isChecked()) {
+            esFiable = true;
+        } else if (rbNoFiable.isChecked()) {
+            esFiable = false;
+        }
+        noticiaN.setFiable(esFiable);
+
+        return noticiaN;
+    }
+
+    public boolean sonDatosCorrectos() {
+        boolean sonCorrectos = false;
+
         if (etTitular.getText().toString().isEmpty()) {
             Toast.makeText(getContext(), "La noticia debe tener un titular", Toast.LENGTH_SHORT).show();
-            return null;
+            return false;
         } else {
-            titular = etTitular.getText().toString();
+            sonCorrectos = true;
         }
 
         if (etEnlace.getText().toString().isEmpty()) {
-            Toast.makeText(getContext(), "La noticia debe tener un enlace", Toast.LENGTH_SHORT).show();            return null;
+            Toast.makeText(getContext(), "La noticia debe tener un enlace", Toast.LENGTH_SHORT).show();
+            return false;
         } else {
-            enlace = etEnlace.getText().toString();
+            sonCorrectos = true;
         }
 
         if (etFecha.getText().toString().isEmpty()) {
-            Toast.makeText(getContext(), "La fecha no puede estar vacía", Toast.LENGTH_SHORT).show();            return null;
+            Toast.makeText(getContext(), "La fecha no puede estar vacía", Toast.LENGTH_SHORT).show();
+            return false;
         } else {
-            fecha = etFecha.getText().toString();
+            sonCorrectos = true;
         }
-
+        String fecha = etFecha.getText().toString();
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             sdf.parse(fecha);
 
         } catch (ParseException e) {
             Toast.makeText(getContext(), "La fecha no es válida", Toast.LENGTH_SHORT).show();
-            return null;
+            return false;
         }
-        noticia.setTitular(etTitular.getText().toString());
-        noticia.setEnlace(etEnlace.getText().toString());
-        noticia.setFechaFromString(etFecha.getText().toString());
-        noticia.setLeida(cbLeido.isChecked());
-        noticia.setFavorita(cbFavorito.isChecked());
-
-        boolean esFiable = false;
-        if (rbFiable.isChecked()) {
-            esFiable = true;
-        } else if (rbNoFiable.isChecked()) {
-            esFiable = false;
+        if (rbFiable.isChecked() || rbNoFiable.isChecked()) {
+            sonCorrectos = true;
         } else {
             Toast.makeText(getContext(), "Debe seleccionar si la noticia es fiable o no", Toast.LENGTH_SHORT).show();
-            return null;
+            return false;
         }
-
-        noticia.setFiable(esFiable);
-
-        return noticia;
+        return sonCorrectos;
     }
 
-    private void rellenarFicha(Noticia noticia){
+    private void rellenarFicha(Noticia noticia) {
         etTitular.setText(noticia.getTitular());
         etEnlace.setText(noticia.getEnlace());
         etFecha.setText(transformarFechaLongToString(noticia.getFecha())); //TODO: No lo muestra bien
-        if(noticia.isFavorita()){
+        if (noticia.isFavorita()) {
             cbFavorito.setChecked(true);
         }
-        if(noticia.isLeida()){
+        if (noticia.isLeida()) {
             cbLeido.setChecked(true);
         }
-        if(noticia.isFiable()){
+        if (noticia.isFiable()) {
             rbFiable.setChecked(true);
         } else {
             rbNoFiable.setChecked(true);

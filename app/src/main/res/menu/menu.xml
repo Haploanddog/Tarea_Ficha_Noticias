@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/it_menu_listado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <item
+            android:id="@+id/it_volver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/volverInfo"
+            android:icon="@drawable/icono_volver"
+            android:orderInCategory="110"
+            android:title="@string/volver"
+            app:showAsAction="ifRoom|withText" />
+        <item
+            android:id="@+id/it_anadir_noticia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/anadirNoticiaInfo"
+            android:icon="@drawable/icono_anadir"
+            android:orderInCategory="120"
+            android:title="@string/anadirNoticia"
+            app:showAsAction="ifRoom|withText" />
+        <item
+            android:id="@+id/it_borrar_noticia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/borrarInfo"
+            android:icon="@drawable/icono_borrar"
+            android:orderInCategory="130"
+            android:title="@string/borrar"
+            app:showAsAction="ifRoom|withText" />
+    </group>
+    <group
+        android:id="@+id/it_menu_ppal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         >
+        <item
+            android:id="@+id/it_preferencias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/preferenciasInfo"
+            android:orderInCategory="110"
+            android:title="@string/preferencias" />
+        <item
+            android:id="@+id/it_acerca_de"
+            android:contentDescription="@string/acercaDeInfo"
+            android:orderInCategory="120"
+            android:title="@string/acercaDe" />
+        <item
+            android:id="@+id/it_salir"
+            android:contentDescription="@string/salirInfo"
+            android:orderInCategory="130"
+            android:title="@string/salir" />
+    </group>
+</menu>

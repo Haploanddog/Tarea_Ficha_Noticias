@@ -12,6 +12,16 @@
         android:theme="@style/Themes.MiTema"
         tools:targetApi="31">
         <activity
+            android:name=".listaNoticias.BorrarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".preferencias.PreferenciasActivity"
+            android:exported="false"
+            android:label="@string/title_activity_preferencias" />
+        <activity
+            android:name=".menus.AboutUs"
+            android:exported="false" />
+        <activity
             android:name=".listaNoticias.ListadoNoticiasActivity"
             android:exported="false" />
         <activity

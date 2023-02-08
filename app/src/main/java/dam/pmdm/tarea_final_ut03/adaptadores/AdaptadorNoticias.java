@@ -10,8 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dam.pmdm.tarea_final_ut03.R;
@@ -26,10 +28,23 @@ public class AdaptadorNoticias extends RecyclerView.Adapter {
     private Context contexto;
 
     private int posicion;
+    private boolean esParaBorrar;
 
-    public AdaptadorNoticias(Context contexto, List<Noticia> listadoNoticias){
+    private ArrayList<Noticia> noticiasSeleccionadas;
+
+    public ArrayList<Noticia> getNoticiasSeleccionadas() {
+        return noticiasSeleccionadas;
+    }
+
+    public void setNoticiasSeleccionadas(ArrayList<Noticia> noticiasSeleccionadas) {
+        this.noticiasSeleccionadas = noticiasSeleccionadas;
+    }
+
+    public AdaptadorNoticias(Context contexto, List<Noticia> listadoNoticias, boolean esParaBorrar){
         this.listadoNoticias = listadoNoticias;
         this.contexto = contexto;
+        this.esParaBorrar = esParaBorrar;
+        noticiasSeleccionadas = new ArrayList<>();
     }
 
     public List<Noticia> getListadoNoticias() {
@@ -86,20 +101,37 @@ public class AdaptadorNoticias extends RecyclerView.Adapter {
         //Si detectamos un click, hacemos que el atributo "posicion" del Adaptador
         //sea igual a la posición del elemento del RecyclerView donde se haga el click.
         //Así conseguimos guardar el elemento sobre el que tenemos que actuar.
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setPosicion(holder.getAbsoluteAdapterPosition());
-                Intent intent = new Intent(contexto, FichaActivity.class);
-                intent.putExtra("ID", posicion);
-                intent.putExtra("esParaActualizar",true);
-                contexto.startActivity(intent);
+                if(!esParaBorrar) {
+                    int uid = listadoNoticias.get(holder.getBindingAdapterPosition()).getUid()-1;
+
+
+                    Intent intent = new Intent(contexto, FichaActivity.class);
+                    intent.putExtra("ID", uid);
+                    intent.putExtra("esParaActualizar", true);
+                    contexto.startActivity(intent);
+                } else {
+
+                    Noticia noticiaSeleccionada = listadoNoticias.get(posicion);
+
+                    if (noticiasSeleccionadas.contains(noticiaSeleccionada)) {
+                        noticiasSeleccionadas.remove(noticiaSeleccionada);
+                        v.setBackgroundColor(Color.WHITE);
+                    } else {
+                        noticiasSeleccionadas.add(noticiaSeleccionada);
+                        v.setBackgroundColor(Color.LTGRAY);
+                    }
+                }
             }
         });
     }
 
     @Override
     public int getItemCount() {
+
         //Devolvemos el tamaño del listadoNoticias
         return listadoNoticias.size();
     }
@@ -131,7 +163,8 @@ public class AdaptadorNoticias extends RecyclerView.Adapter {
                 iconoTrueFalse.setImageResource(R.drawable.no_ok_icon);
             }
             if(noticia.isFavorita()){
-                numeroNoticia.setBackgroundColor(Color.YELLOW);
+
+                numeroNoticia.setBackgroundColor(ContextCompat.getColor(contexto,R.color.amarillo));
             } else {
                 numeroNoticia.setBackgroundColor(Color.WHITE);
             }
@@ -141,7 +174,7 @@ public class AdaptadorNoticias extends RecyclerView.Adapter {
             } else {
                 titularNoticia.setTextAppearance(R.style.TitleBold);
             }
-            numeroNoticia.setText(String.valueOf(noticia.getUid())+"º");
+            numeroNoticia.setText(String.valueOf(listadoNoticias.indexOf(noticia)+1)+"º");
             titularNoticia.setText(noticia.getTitular().toString());
         }
         @Override

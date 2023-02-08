@@ -9,4 +9,46 @@
     <string name="no_fiable">No fiable</string>
     <string name="leido">Leído</string>
     <string name="favorito">Favorito</string>
+    <string name="volverInfo">Vuelve a la pantalla principal</string>
+    <string name="anadirNoticiaInfo">Añade una noticia</string>
+    <string name="anadirNoticia">Añadir Noticia</string>
+    <string name="borrarInfo">Borra una noticia</string>
+    <string name="borrar">Borrar Noticia</string>
+    <string name="preferenciasInfo">Muestra las preferencias</string>
+    <string name="preferencias">Preferencias</string>
+    <string name="acercaDeInfo">Información del desarrollador</string>
+    <string name="acercaDe">Acerca de</string>
+    <string name="salirInfo">Salir de la aplicación</string>
+    <string name="salir">Salir</string>
+    <string name="david">David Quesada García</string>
+    <string name="anyo2023">2023</string>
+    <string name="title_activity_preferencias">PreferenciasActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="baseDatos">Base de datos</string>
+    <string name="interna">Interna SQLite</string>
+    <string name="externa">Externa MySQL, MariaDB</string>
+    <string name="bd">Base de datos</string>
+    <string name="tipoBD">Tipo de BD</string>
+    <string name="nombreBD">Nombre de BD externa</string>
+    <string name="ip">IP o URL del servidor</string>
+    <string name="puerto">Nº Puerto</string>
+    <string name="usuario">Nombre de usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="btnBorrar">Borrar</string>
+    <string name="btnCancelar">Cancelar</string>
+    <string name="seleccione">Seleccione las noticias a borrar</string>
 </resources>

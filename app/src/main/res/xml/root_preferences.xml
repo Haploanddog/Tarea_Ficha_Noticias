@@ -1,0 +1,40 @@
+<PreferenceScreen xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <PreferenceCategory app:title="@string/tipoBD">
+
+        <SwitchPreferenceCompat
+            app:key="bd"
+            app:summaryOff="@string/interna"
+            app:summaryOn="@string/externa"
+            app:title="@string/bd"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/nombreBD"
+        android:dependency="bd">
+        <EditTextPreference
+            android:title="@string/nombreBD"
+            android:key="nombreBD"/>
+
+        <EditTextPreference
+            android:title="@string/ip"
+            android:key="ip"/>
+
+        <EditTextPreference
+            android:title="@string/puerto"
+            android:key="puerto"/>
+
+        <EditTextPreference
+            android:title="@string/usuario"
+            android:key="usuario"/>
+
+        <EditTextPreference
+            android:title="@string/password"
+            android:key="password"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

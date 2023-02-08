@@ -30,6 +30,11 @@ public interface NoticiaDAO {
     //Método que realiza la consulta anterior
     Noticia findByNoticia(int uid);
 
+    //Anotación que permite realizar una consulta para mostrar el número total de noticias
+    @Query("SELECT COUNT(*) FROM noticia")
+    // método que realiza la consulta anterior
+    int getNumNoticias();
+
     //Anotación que permite realizar la inserción de una relación de noticias
     @Insert
     //Método que realiza la inserción anterior
@@ -44,5 +49,6 @@ public interface NoticiaDAO {
     @Update
     //Método que realiza la actualización anterior
     void update(Noticia noticia);
+
 
 }

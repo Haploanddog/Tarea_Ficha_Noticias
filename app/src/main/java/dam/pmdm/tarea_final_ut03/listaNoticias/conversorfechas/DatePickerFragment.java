@@ -31,9 +31,11 @@ public class DatePickerFragment extends DialogFragment
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        // Almacenar la fecha seleccionada
         EditText etFecha = getActivity().findViewById(R.id.et_fecha);
-        etFecha.setText(day + "/" + (month + 1) + "/" + year);
+        String dia = day < 10 ? "0" + day : "" + day;
+        String mes = (month + 1) < 10 ? "0" + (month + 1) : "" + (month + 1);
+        String fecha = dia + "/" + mes + "/" + year;
+        etFecha.setText(fecha);
     }
 }
 
