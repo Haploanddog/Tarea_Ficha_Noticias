@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".listaNoticias.BorrarActivity">
+    tools:context=".modificarListadoNoticias.BorrarActivity">
 
     <TextView
         android:id="@+id/textView10"
@@ -13,7 +13,8 @@
         android:paddingStart="15sp"
         android:text="@string/seleccione"
         android:textColor="@color/verde_azul"
-        android:textStyle="italic"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
         app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

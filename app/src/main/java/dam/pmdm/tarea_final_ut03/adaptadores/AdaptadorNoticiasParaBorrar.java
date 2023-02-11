@@ -18,7 +18,7 @@ import java.util.List;
 
 import dam.pmdm.tarea_final_ut03.R;
 import dam.pmdm.tarea_final_ut03.entidades.Noticia;
-import dam.pmdm.tarea_final_ut03.listaNoticias.FichaActivity;
+import dam.pmdm.tarea_final_ut03.modificarListadoNoticias.FichaActivity;
 
 public class AdaptadorNoticiasParaBorrar  extends RecyclerView.Adapter {
 

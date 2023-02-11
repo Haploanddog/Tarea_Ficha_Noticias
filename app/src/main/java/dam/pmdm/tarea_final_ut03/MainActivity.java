@@ -17,7 +17,6 @@ import dam.pmdm.tarea_final_ut03.listaNoticias.ListadoNoticiasActivity;
 import dam.pmdm.tarea_final_ut03.menus.AboutUs;
 import dam.pmdm.tarea_final_ut03.preferencias.PreferenciasActivity;
 
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView imbPulsaBoton;
@@ -59,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Se muestra el grupo de opciones
         menu.setGroupVisible(R.id.it_menu_ppal, true);
         menu.setGroupVisible(R.id.it_menu_listado, false);
+        menu.setGroupVisible(R.id.it_menu_preferencias,true);
 
         return super.onCreateOptionsMenu(menu);
     }

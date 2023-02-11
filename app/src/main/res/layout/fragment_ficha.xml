@@ -10,7 +10,7 @@
     android:background="@color/lint"
     android:orientation="vertical"
     android:padding="5dp"
-    tools:context=".listaNoticias.FichaActivity">
+    tools:context=".modificarListadoNoticias.FichaActivity">
 
     <TextView
         android:id="@+id/textView2"

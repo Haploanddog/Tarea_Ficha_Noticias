@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +13,7 @@
         android:theme="@style/Themes.MiTema"
         tools:targetApi="31">
         <activity
-            android:name=".listaNoticias.BorrarActivity"
+            android:name=".modificarListadoNoticias.BorrarActivity"
             android:exported="false" />
         <activity
             android:name=".preferencias.PreferenciasActivity"
@@ -25,7 +26,7 @@
             android:name=".listaNoticias.ListadoNoticiasActivity"
             android:exported="false" />
         <activity
-            android:name=".listaNoticias.FichaActivity"
+            android:name=".modificarListadoNoticias.FichaActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

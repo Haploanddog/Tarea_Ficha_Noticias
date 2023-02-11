@@ -1,12 +1,13 @@
-package dam.pmdm.tarea_final_ut03.listaNoticias;
+package dam.pmdm.tarea_final_ut03.modificarListadoNoticias;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -22,14 +24,14 @@ import java.util.concurrent.Executors;
 import dam.pmdm.tarea_final_ut03.R;
 import dam.pmdm.tarea_final_ut03.adaptadores.AdaptadorNoticias;
 import dam.pmdm.tarea_final_ut03.basedatos.BaseDatosApp;
+import dam.pmdm.tarea_final_ut03.basedatos.BaseDatosExterna;
 import dam.pmdm.tarea_final_ut03.entidades.Noticia;
-import dam.pmdm.tarea_final_ut03.listaNoticias.ui.main.FichaFragment;
-import dam.pmdm.tarea_final_ut03.listaNoticias.ui.main.ListadoViewModel;
+import dam.pmdm.tarea_final_ut03.listaNoticias.ListadoNoticiasActivity;
+import dam.pmdm.tarea_final_ut03.listaNoticias.ListadoViewModel;
 
 public class BorrarActivity extends AppCompatActivity {
-
     private RecyclerView rv;
-    private FichaFragment ficha;
+
     private ListadoViewModel listaNoticiasViewModel;
     private Button btnBorrar;
     private Button btnCancelar;
@@ -42,6 +44,8 @@ public class BorrarActivity extends AppCompatActivity {
 
     private List<Noticia> listaNoticias = new ArrayList<>();
 
+    private boolean esBdExterna = ListadoNoticiasActivity.esBdExterna;
+    private BaseDatosExterna bdExterna;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,8 +61,18 @@ public class BorrarActivity extends AppCompatActivity {
         rv.setHasFixedSize(true);
         filasSeleccionadas = new ArrayList<>();
         esParaBorrarNoticias = false;
-        //Creamos/obtenemos la instancia de la base de datos Room
-        bd = BaseDatosApp.getInstance(this);
+
+        //Comprobamos si se utiliza la BD externa o interna y se instancia lo que corresponda
+        if(esBdExterna){
+            try {
+                bdExterna = new BaseDatosExterna(ListadoNoticiasActivity.URL, ListadoNoticiasActivity.USER, ListadoNoticiasActivity.PASS);
+            } catch (Exception ex) {
+                Toast.makeText(this, "Error al conectar con bd", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            bd = BaseDatosApp.getInstance(this);
+        }
 
         //Creamos el adaptador
         adaptador = new AdaptadorNoticias(this, listaNoticias, true);
@@ -75,10 +89,13 @@ public class BorrarActivity extends AppCompatActivity {
         listaNoticiasViewModel.getNoticias().observe(this, new Observer<List<Noticia>>() {
             @Override
             public void onChanged(List<Noticia> noticias) {
-                synchronized (this) {
+                if (esBdExterna) {
+                    bdExterna = new BaseDatosExterna(ListadoNoticiasActivity.URL, ListadoNoticiasActivity.USER, ListadoNoticiasActivity.PASS);
+                    listaNoticias = bdExterna.obtenerTodasNoticias().getValue();
+                } else {
                     listaNoticias = noticias;
-                    adaptador.setListadoNoticias(listaNoticias);
                 }
+                adaptador.setListadoNoticias(listaNoticias);
             }
         });
         //Escuchador del botón Cancelar (lleva al ListadoNoticiasActivity)
@@ -92,16 +109,22 @@ public class BorrarActivity extends AppCompatActivity {
         btnBorrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(adaptador.getNoticiasSeleccionadas().size() > 0){
                 AlertDialog.Builder builder = new AlertDialog.Builder(BorrarActivity.this);
                 builder.setTitle("Eliminar noticias");
                 StringBuilder sb = new StringBuilder();
                 for (Noticia noticia : adaptador.getNoticiasSeleccionadas()
                 ) {
-                    sb.append(noticia.getUid());
+                    sb.append(adaptador.getListadoNoticias().indexOf(noticia)+1);
                     sb.append(", ");
                 }
-                builder.setMessage("¿Desea realmente eliminar las noticias con id: " + sb.toString() + "?");
+                if (sb.length() > 1) { // Eliminamos los últimos caracteres ", "
+                    sb.deleteCharAt(sb.length() - 1);
+                    sb.deleteCharAt(sb.length() - 1);
+                } else {
+                    sb.append("");
+                }
+                builder.setMessage("¿Desea realmente eliminar las noticias nº: " + sb.toString() + "?");
                 builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -121,10 +144,12 @@ public class BorrarActivity extends AppCompatActivity {
                     }
                 });
                 builder.create().show();
-            }
+
+            } else {
+                    Toast.makeText(BorrarActivity.this, "No ha seleccionado ninguna noticia",Toast.LENGTH_SHORT).show();
+                }}
         });
     }
-
 
     public List<Noticia> getListaNoticias() {
         return listaNoticias;
@@ -151,10 +176,17 @@ public class BorrarActivity extends AppCompatActivity {
 
         @Override
         public void run() {
+            if (esBdExterna) {
+                try {
+                    bdExterna.eliminarNoticia(noticia);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
             // Se usa el método insertAll de la interfaz productoDAO, implementada en BaseDatosApp
             bd.noticiaDAO().delete(noticia);
         }
-    }
+    }}
     class EncontrarNoticia implements Runnable {
 
 
@@ -170,5 +202,20 @@ public class BorrarActivity extends AppCompatActivity {
             Noticia noticia = bd.noticiaDAO().findByNoticia(id);
 
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("noticiasSeleccionadas", adaptador.getNoticiasSeleccionadas());
+        outState.putInt("posicion", adaptador.getPosicion());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        adaptador.setNoticiasSeleccionadas(savedInstanceState.getParcelableArrayList("noticiasSeleccionadas",Noticia.class));
+        adaptador.setPosicion(savedInstanceState.getInt("posicion"));
+        adaptador.notifyDataSetChanged();
     }
 }

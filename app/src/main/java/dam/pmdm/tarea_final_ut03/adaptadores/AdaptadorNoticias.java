@@ -18,15 +18,14 @@ import java.util.List;
 
 import dam.pmdm.tarea_final_ut03.R;
 import dam.pmdm.tarea_final_ut03.entidades.Noticia;
-import dam.pmdm.tarea_final_ut03.listaNoticias.FichaActivity;
+import dam.pmdm.tarea_final_ut03.modificarListadoNoticias.FichaActivity;
 
 
 public class AdaptadorNoticias extends RecyclerView.Adapter {
 
     private List<Noticia> listadoNoticias;
-
+    private ArrayList<Noticia> listaNoticiasArray;
     private Context contexto;
-
     private int posicion;
     private boolean esParaBorrar;
 
@@ -40,6 +39,24 @@ public class AdaptadorNoticias extends RecyclerView.Adapter {
         this.noticiasSeleccionadas = noticiasSeleccionadas;
     }
 
+    public ArrayList<Noticia> getListaNoticiasArray() {
+        return noticiasSeleccionadas;
+    }
+
+    public void setListaNoticiasArray(ArrayList<Noticia> listaNoticiasArray) {
+        this.listaNoticiasArray = getNoticiasSeleccionadas();
+    }
+
+    /**
+     * Dependiendo de su parámetro esParaBorrar el método onClick de cada elemento tendrá una función
+     * diferente:
+     * - Si es false, el método onClick lleva a FichaActivity para actualizar una Noticia
+     * - Si es true, el método onClick selecciona la Noticia (guardándola en noticiasSeleccionadas) y
+     *   pinta la fila de gris
+     * @param contexto
+     * @param listadoNoticias
+     * @param esParaBorrar
+     */
     public AdaptadorNoticias(Context contexto, List<Noticia> listadoNoticias, boolean esParaBorrar){
         this.listadoNoticias = listadoNoticias;
         this.contexto = contexto;
@@ -98,31 +115,33 @@ public class AdaptadorNoticias extends RecyclerView.Adapter {
         //Asignamos el dato del array correspondiente a la posición actual al
         //objeto ViewHolder, de forma que se represente en el RecyclerView.
         ((NoticiaViewHolder) holder).bindNoticia(listadoNoticias.get(position));
+
+        // Cuando se recupera el estado, pintamos las filas de noticias seleccionadas
+        if (noticiasSeleccionadas.contains(listadoNoticias.get(position))) {
+            holder.itemView.setBackgroundColor(Color.GRAY);
+        } else {
+            holder.itemView.setBackgroundColor(Color.WHITE);
+        }
         //Si detectamos un click, hacemos que el atributo "posicion" del Adaptador
         //sea igual a la posición del elemento del RecyclerView donde se haga el click.
         //Así conseguimos guardar el elemento sobre el que tenemos que actuar.
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!esParaBorrar) {
                     int uid = listadoNoticias.get(holder.getBindingAdapterPosition()).getUid()-1;
-
-
                     Intent intent = new Intent(contexto, FichaActivity.class);
                     intent.putExtra("ID", uid);
                     intent.putExtra("esParaActualizar", true);
                     contexto.startActivity(intent);
                 } else {
 
-                    Noticia noticiaSeleccionada = listadoNoticias.get(posicion);
-
-                    if (noticiasSeleccionadas.contains(noticiaSeleccionada)) {
-                        noticiasSeleccionadas.remove(noticiaSeleccionada);
-                        v.setBackgroundColor(Color.WHITE);
+                    if (!noticiasSeleccionadas.contains(listadoNoticias.get(holder.getBindingAdapterPosition()))) {
+                        noticiasSeleccionadas.add(listadoNoticias.get(holder.getBindingAdapterPosition()));
+                        holder.itemView.setBackgroundColor(Color.GRAY);
                     } else {
-                        noticiasSeleccionadas.add(noticiaSeleccionada);
-                        v.setBackgroundColor(Color.LTGRAY);
+                        noticiasSeleccionadas.remove(listadoNoticias.get(holder.getBindingAdapterPosition()));
+                        holder.itemView.setBackgroundColor(Color.WHITE);
                     }
                 }
             }

@@ -14,7 +14,7 @@
             android:icon="@drawable/icono_volver"
             android:orderInCategory="110"
             android:title="@string/volver"
-            app:showAsAction="ifRoom|withText" />
+            app:showAsAction="ifRoom" />
         <item
             android:id="@+id/it_anadir_noticia"
             android:layout_width="wrap_content"
@@ -23,7 +23,7 @@
             android:icon="@drawable/icono_anadir"
             android:orderInCategory="120"
             android:title="@string/anadirNoticia"
-            app:showAsAction="ifRoom|withText" />
+            app:showAsAction="ifRoom" />
         <item
             android:id="@+id/it_borrar_noticia"
             android:layout_width="wrap_content"
@@ -32,13 +32,9 @@
             android:icon="@drawable/icono_borrar"
             android:orderInCategory="130"
             android:title="@string/borrar"
-            app:showAsAction="ifRoom|withText" />
+            app:showAsAction="ifRoom" />
     </group>
-    <group
-        android:id="@+id/it_menu_ppal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-         >
+    <group android:id="@+id/it_menu_preferencias">
         <item
             android:id="@+id/it_preferencias"
             android:layout_width="wrap_content"
@@ -46,6 +42,12 @@
             android:contentDescription="@string/preferenciasInfo"
             android:orderInCategory="110"
             android:title="@string/preferencias" />
+    </group>
+    <group
+        android:id="@+id/it_menu_ppal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         >
         <item
             android:id="@+id/it_acerca_de"
             android:contentDescription="@string/acercaDeInfo"
